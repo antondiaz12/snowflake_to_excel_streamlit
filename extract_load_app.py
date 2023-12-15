@@ -4,14 +4,14 @@ import requests #New section to display fruityvice API response
 import snowflake.connector
 from urllib.error import URLError
 
-streamlit.title("Exportación de SF a Excel")
+streamlit.title("Import - from Streamlit to Snowflake")
 
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_cur = my_cnx.cursor()
 my_cur.execute("select * from pc_rivery_db.public.fruit_load_list")
 my_data_rows = my_cur.fetchall()
-streamlit.dataframe(my_data_rows)
-
+table = streamlit.dataframe(my_data_rows)
+table.columns = ['Fruits']
 ## NEW SECTION 
 def get_fruityvice_data(this_fruit_choice):
   fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + this_fruit_choice)
