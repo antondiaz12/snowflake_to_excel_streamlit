@@ -34,7 +34,7 @@ if streamlit.button('Get Fruit Load List'):
   my_data_rows = get_fruit_load_list()
   my_cnx.close()
   info = streamlit.dataframe(my_data_rows)
-  info.streamlit.columns = ['FRUIT', 'QUANTITY', 'COLOR']
+  info.columns = ['FRUIT', 'QUANTITY', 'COLOR']
 
 
 def insert_row_snowflake(new_fruit, new_qty, new_color):
