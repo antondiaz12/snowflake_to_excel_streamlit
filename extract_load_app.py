@@ -59,7 +59,7 @@ my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_data_rows = get_fruit_load_list()
 my_cnx.close()
 info = streamlit.dataframe(my_data_rows)
-fruit_box = streamlit.selectbox('Choose the data',info['FRUIT_NAME'])
+fruit_box = streamlit.selectbox('Choose the data',info[0])
 
   
 
