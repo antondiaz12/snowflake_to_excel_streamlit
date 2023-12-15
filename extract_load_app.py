@@ -19,8 +19,8 @@ try:
     streamlit.error("Please select a fruit to get information")
   else:
     back_from_function = get_fruityvice_data(fruit_choice)
-    info = streamlit.dataframe(back_from_function)
-    info.drop(1, axis=0)
+    streamlit.dataframe(back_from_function)
+    streamlit.mardown(back_from_function.style.hide(axis='index').to_html(), unsafe_allows_html=True)
 except URLError as e:
   streamlit.error()
 
