@@ -23,32 +23,36 @@ try:
 except URLError as e:
   streamlit.error()
 
-streamlit.header("View Our Fruit List - Add You Favorites!")
+  streamlit.header("View Our Fruit List - Add You Favorites!")
 def get_fruit_load_list():
   with my_cnx.cursor() as my_cur:
         my_cur.execute("select * from fruit_load_list")
         return my_cur.fetchall()
 
-if streamlit.button('Get Fruit Load List'):
+if streamlit.button('Get Fruit List'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
   my_data_rows = get_fruit_load_list()
   my_cnx.close()
   info = streamlit.dataframe(my_data_rows)
-  info.columns = ['FRUIT', 'QUANTITY', 'COLOR']
+  streamlit.info.columns = ['FRUIT', 'QUANTITY', 'COLOR']
 
 
 def insert_row_snowflake(new_fruit, new_qty, new_color):
   with my_cnx.cursor() as my_cur:
     my_cur.execute("insert into fruit_load_list(FRUIT_NAME, FRUIT_QTY, FRUIT_COLOR) values ('"+new_fruit+"','"+new_qty+"','"+new_color+"')")
-    return "Thanks for adding " + new_fruit + new_qty + new_color
+    return "Thanks for adding fruit datd"
 
-add_fruit = streamlit.text_input('Which fruit')
-add_qty = streamlit.text_input('Quantity?')
-add_color = streamlit.text_input('Which color')
-if streamlit.button('Add a Fruit to the List'):
+add_fruit = streamlit.text_input('Add a fruit')
+add_qty = streamlit.text_input('Add a quantity')
+add_color = streamlit.text_input('Specify a color')
+if streamlit.button('Click to add data'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
   back_from_function = insert_row_snowflake(add_fruit, add_qty, add_color)
   streamlit.text(back_from_function)
+
+streamlit.header("Would you like to remove a fruit? Specify it!")
+fruit_box = streamlit.selectbox('Choose the data', (info))
+
   
 
 ## STOP!!
