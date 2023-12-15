@@ -20,7 +20,6 @@ try:
   else:
     back_from_function = get_fruityvice_data(fruit_choice)
     streamlit.dataframe(back_from_function)
-    streamlit.markdown(back_from_function.style.hide(axis='index').to_html(), unsafe_allows_html=True)
 except URLError as e:
   streamlit.error()
 
