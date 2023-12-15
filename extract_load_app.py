@@ -20,7 +20,7 @@ try:
   else:
     back_from_function = get_fruityvice_data(fruit_choice)
     info = streamlit.dataframe(back_from_function)
-    info.reset_index(drop=True)
+    info.drop(1, axis=0)
 except URLError as e:
   streamlit.error()
 
