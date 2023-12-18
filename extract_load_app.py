@@ -39,16 +39,14 @@ if streamlit.button('Get Fruit List'):
 def insert_row_snowflake(new_fruit):
   with my_cnx.cursor() as my_cur:
     my_cur.execute("insert into fruit_load_list(FRUIT_NAME) values ('"+new_fruit+"')")
-    return "Thanks for adding fruit datd"
+    return "Thanks for adding fruit data"
 
-#def remove_row_snowflake(remove_data):
-#  with my_cnx.cursor() as my_cur:
-#    my_cur.execute("delete from fruit_load_list where  ('"+new_fruit+"','"+new_qty+"','"+new_color+"')")
-#    return "Thanks for adding fruit datd"
+def remove_row_snowflake(remove_data):
+  with my_cnx.cursor() as my_cur:
+    my_cur.execute("delete from fruit_load_list where  ('"+new_fruit+"')")
+    return "Thanks removing data!"
 
 add_fruit = streamlit.text_input('Add a fruit')
-#add_qty = streamlit.text_input('Add a quantity')
-#add_color = streamlit.text_input('Add a color')
 if streamlit.button('Click to add data'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
   back_from_function = insert_row_snowflake(add_fruit)
@@ -59,8 +57,11 @@ my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_data_rows = get_fruit_load_list()
 my_cnx.close()
 info = streamlit.dataframe(my_data_rows)
-fruit_box = streamlit.selectbox('Choose the data', my_data_rows)
-
+fruit_box = streamlit.selectbox('Choose the fruit', my_data_rows)
+if fruit_box:
+  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+  back_from_function = delete_row_snowflake(fruit_box)
+  streamlit.text(back_from_function)
 
 ## STOP!!
 streamlit.stop()
