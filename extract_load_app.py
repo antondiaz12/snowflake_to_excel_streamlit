@@ -57,10 +57,10 @@ my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_data_rows = get_fruit_load_list()
 my_cnx.close()
 info = streamlit.dataframe(my_data_rows)
-fruit_box = streamlit.selectbox('Choose the fruit', my_data_rows)
+fruit_box = streamlit.selectbox('Choose the fruit', list(my_data_rows))
 if fruit_box:
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-  back_from_function = delete_row_snowflake(fruit_box)
+  back_from_function = remove_row_snowflake(fruit_box)
   streamlit.text(back_from_function)
 
 ## STOP!!
