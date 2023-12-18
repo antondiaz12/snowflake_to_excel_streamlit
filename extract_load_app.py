@@ -58,6 +58,7 @@ if streamlit.button('Get Fruit List'):
   my_data_rows = get_fruit_load_list()
   my_cnx.close()
   info = streamlit.dataframe(my_data_rows)
+  
 fruit_box = streamlit.selectbox('Specify the fruit', my_data_rows[0])
 if streamlit.button('Click to remove data'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
