@@ -43,7 +43,7 @@ def insert_row_snowflake(new_fruit):
 
 def remove_row_snowflake(remove_data):
   with my_cnx.cursor() as my_cur:
-    my_cur.execute("delete from fruit_load_list where  ('"+new_fruit+"')")
+    my_cur.execute("delete from fruit_load_list where fruit_name = ('"+new_fruit+"')")
     return "Thanks removing data!"
 
 add_fruit = streamlit.text_input('Add a fruit')
