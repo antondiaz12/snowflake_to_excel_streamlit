@@ -42,7 +42,10 @@ def insert_row_snowflake(new_fruit):
 
 def remove_row_snowflake(remove_fruit):
   with my_cnx.cursor() as my_cur:
-    my_cur.execute("delete from fruit_load_list where FRUIT_NAME = ('"+remove_fruit+"')")
+    if fruit_box in my_data_rows:
+      my_cur.execute("delete from fruit_load_list where FRUIT_NAME = ('"+remove_fruit+"')")
+    else:
+      streamlit.error("This fruit does not exist already.")
     return "Thanks for removing fruit data!"
 
 def update_row_snowflake(update_fruit, old_fruit):
