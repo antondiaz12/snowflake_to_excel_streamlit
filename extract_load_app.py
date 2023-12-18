@@ -53,16 +53,16 @@ if streamlit.button('Click to add data'):
   streamlit.text(back_from_function)
 
 streamlit.header("Would you like to remove a fruit?")
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-my_data_rows = get_fruit_load_list()
-my_cnx.close()
-info = streamlit.dataframe(my_data_rows)
-fruit_box = streamlit.selectbox('Specify the fruit', my_data_rows[:])
+if streamlit.button('Get Fruit List'):
+  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+  my_data_rows = get_fruit_load_list()
+  my_cnx.close()
+  info = streamlit.dataframe(my_data_rows)
+fruit_box = streamlit.selectbox('Specify the fruit', my_data_rows[0])
 if streamlit.button('Click to remove data'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
   back_from_function = remove_row_snowflake(fruit_box)
   streamlit.text(back_from_function)
-info = streamlit.dataframe(my_data_rows)
 
 ## STOP!!
 streamlit.stop()
