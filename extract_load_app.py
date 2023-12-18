@@ -52,7 +52,7 @@ if streamlit.button('Click to add data'):
   streamlit.text(back_from_function)
 
 streamlit.header("Would you like to remove a fruit?")
-fruit_box = streamlit.text_input('Specify the fruit', my_data_rows)
+fruit_box = streamlit.text_input('Specify the fruit')
 if streamlit.button('Click to remove data'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
   back_from_function = remove_row_snowflake(fruit_box)
