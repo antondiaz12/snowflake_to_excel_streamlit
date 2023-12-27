@@ -34,8 +34,7 @@ if streamlit.button('Get Fruit List'):
   my_data_rows = get_fruit_load_list()
   my_cnx.close()
   table = pandas.DataFrame(my_data_rows)
-  table = table.columns = ["Fruits"]
-  table = table.style.hide_index()
+  table.columns = ["Fruits"]
   info = streamlit.dataframe(table)
 
 
