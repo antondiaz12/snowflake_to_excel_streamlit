@@ -66,6 +66,8 @@ try:
   else:
     if fruit_box in list(info):
       streamlit.text("Response saved!")
+    else:
+      streamlit.text("Not valid")
 except URLError as e:
   streamlit.error()
 if streamlit.button('Click to remove data'):
