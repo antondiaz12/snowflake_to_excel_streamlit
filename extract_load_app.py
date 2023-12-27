@@ -64,10 +64,12 @@ try:
   if not fruit_box:
     streamlit.error("Please select a fruit from the list")
   else:
-    if streamlit.button('Click to remove data'):
-      my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-      back_from_function = remove_row_snowflake(fruit_box)
-      streamlit.text(back_from_function)
+    streamlit.text(fruit_box)
+    streamlit.text(list(info))
+    my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+    back_from_function = remove_row_snowflake(fruit_box)
+    streamlit.text(back_from_function)
+    streamlit.button('Data removed!')
 except URLError as e:
   streamlit.error()
 
