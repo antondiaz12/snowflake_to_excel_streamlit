@@ -63,7 +63,6 @@ try:
   if not fruit_box:
     streamlit.error("Please select a fruit from the list")
   else:
-    back_from_function = get_fruityvice_data(fruit_choice)
     streamlit.text("Response saved!")
 except URLError as e:
   st.error()
