@@ -61,7 +61,7 @@ streamlit.header("Would you like to remove a fruit?")
 try:
   fruit_box = streamlit.text_input('Specify the fruit')
   if not fruit_box:
-    st.error("Please select a fruit from the list")
+    streamlit.error("Please select a fruit from the list")
   else:
     back_from_function = get_fruityvice_data(fruit_choice)
     streamlit.text("Response saved!")
