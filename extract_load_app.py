@@ -63,7 +63,7 @@ if streamlit.button('Click to add data'):
 streamlit.header("Would you like to remove a fruit?")
 fruit_box = streamlit.text_input('Specify the fruit')
 if not fruit_box:
-  streamlit.error("Please select a fruit from the list")
+  streamlit.text("Please select a fruit from the list")
 else:
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
   my_data_rows = get_fruit_load_list()
