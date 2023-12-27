@@ -74,8 +74,7 @@ else:
     streamlit.text('Data removed!')
   else:
     streamlit.text('Please enter a valid fruit')
-except URLError as e:
-  streamlit.error()
+
 
 
 streamlit.header("Would you like to update a fruit?")
