@@ -65,7 +65,7 @@ try:
     streamlit.error("Please select a fruit from the list")
   else:
     streamlit.text(fruit_box)
-    streamlit.text(info[:])
+    streamlit.text(info)
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
     back_from_function = remove_row_snowflake(fruit_box)
     streamlit.text(back_from_function)
