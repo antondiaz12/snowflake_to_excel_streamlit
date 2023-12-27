@@ -65,7 +65,7 @@ try:
     streamlit.error("Please select a fruit from the list")
   else:
     if fruit_box in list(info):
-    streamlit.text("Response saved!")
+      streamlit.text("Response saved!")
 except URLError as e:
   streamlit.error()
 if streamlit.button('Click to remove data'):
