@@ -61,6 +61,7 @@ if streamlit.button('Click to add data'):
   streamlit.text(back_from_function)
 
 streamlit.header("Would you like to remove a fruit?")
+fruit_box = streamlit.text_input('Specify the fruit')
 if not fruit_box:
   streamlit.error("Please select a fruit from the list")
 else:
