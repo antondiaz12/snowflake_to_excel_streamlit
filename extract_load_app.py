@@ -67,7 +67,7 @@ try:
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
     my_data_rows = get_fruit_load_list()
     my_cnx.close()
-    info = streamlit.dataframe(my_data_rows)
+    info = pandas.DataFrame(my_data_rows)
     if fruit_box in info.values:
       my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
       back_from_function = remove_row_snowflake(fruit_box)
