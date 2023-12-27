@@ -65,7 +65,7 @@ try:
   else:
     streamlit.text("Response saved!")
 except URLError as e:
-  st.error()
+  streamlit.error()
 if streamlit.button('Click to remove data'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
   back_from_function = remove_row_snowflake(fruit_box)
