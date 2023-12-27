@@ -58,14 +58,19 @@ if streamlit.button('Click to add data'):
   streamlit.text(back_from_function)
 
 streamlit.header("Would you like to remove a fruit?")
-fruit_box = streamlit.text_input('Specify the fruit')
+try:
+  fruit_box = streamlit.text_input('Specify the fruit')
+  if not fruit_box:
+    st.error("Please select a fruit from the list")
+  else:
+    back_from_function = get_fruityvice_data(fruit_choice)
+    streamlit.text("Response saved!")
+except URLError as e:
+  st.error()
 if streamlit.button('Click to remove data'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-  if fruit_box in streamlit.dataframe(get_fruit_load_list()):
-    back_from_function = remove_row_snowflake(fruit_box)
-    streamlit.text(back_from_function)
-  else:
-    streamlit.error("This fruit is not on the list.")
+  back_from_function = remove_row_snowflake(fruit_box)
+  streamlit.text(back_from_function)
 
 streamlit.header("Would you like to update a fruit?")
 old_fruit = streamlit.text_input('Which fruit to update?')
