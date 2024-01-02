@@ -15,7 +15,7 @@ def get_fruityvice_data(this_fruit_choice):
 def get_fruit_load_list():
   with my_cnx.cursor() as my_cur:
         my_cur.execute("select * from fruit_load_list")
-  return my_cur.fetchall()
+        return my_cur.fetchall()
 
 streamlit.header("Fruityvice Fruit Advice!")
 try:
@@ -33,8 +33,8 @@ if streamlit.button('Get Fruit List'):
   my_data_rows = get_fruit_load_list()
   my_cnx.close()
   table = pandas.DataFrame(my_data_rows)
-  #table.columns = ["Fruits"]
-  info = streamlit.dataframe(table)
+  table.columns = ["Fruits"]
+  streamlit.dataframe(table)
 
 # FUNCTIONS: ADD, REMOVE, UPDATE
 def insert_row_snowflake(new_fruit):
@@ -48,7 +48,7 @@ def insert_row_snowflake(new_fruit):
       message = "Thanks for adding fruit data"
     else:
       message = "This fruit is already in the list"
-  return message
+    return message
 
 def remove_row_snowflake(remove_fruit):
   with my_cnx.cursor() as my_cur:
