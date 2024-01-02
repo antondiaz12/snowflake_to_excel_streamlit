@@ -40,7 +40,7 @@ if streamlit.button('Get Fruit List'):
 
 def insert_row_snowflake(new_fruit):
   with my_cnx.cursor() as my_cur:
-    my_cur.execute("insert into fruit_load_list(FRUIT_NAME) values ('"+new_fruit+"')")
+    my_cur.execute("insert into fruit_load_list(FRUIT_NAME) values ('"+new_fruit.lower()+"')")
     return "Thanks for adding fruit data"
 
 def remove_row_snowflake(remove_fruit):
