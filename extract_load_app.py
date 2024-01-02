@@ -73,32 +73,40 @@ else:
   
 # -- REMOVE 
 streamlit.header("Would you like to remove a fruit?")
-try:
-  fruit_box = streamlit.text_input('Specify the fruit')
-  if not fruit_box:
-    streamlit.text("Please select a fruit from the list")
-  else:
+fruit_box = streamlit.text_input('Specify the fruit')
+if not fruit_box:
+  streamlit.text("Please select a fruit from the list")
+else:
+  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+  my_data_rows = get_fruit_load_list()
+  my_cnx.close()
+  info = pandas.DataFrame(my_data_rows)
+  if fruit_box in info.values:
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-    my_data_rows = get_fruit_load_list()
-    my_cnx.close()
-    info = pandas.DataFrame(my_data_rows)
-    if fruit_box in info.values:
-      my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-      back_from_function = remove_row_snowflake(fruit_box)
-      streamlit.text(back_from_function)
-    else:
-      streamlit.text('Please enter a valid fruit')
-except URLError as e:
-  streamlit.error()
+    back_from_function = remove_row_snowflake(fruit_box)
+    streamlit.text(back_from_function)
+  else:
+    streamlit.text('Please enter a valid fruit')
+
 
 # -- UPDATE
 streamlit.header("Would you like to update a fruit?")
 old_fruit = streamlit.text_input('Which fruit to update?')
-new_fruit = streamlit.text_input('Write the update')
-if streamlit.button('Click to update data'):
+new_fruit = streamlit.text_input('Write the change')
+if not old_fruit or not new_fruit:
+  streamlit.text("Please check the fields")
+else:
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-  back_from_function = update_row_snowflake(new_fruit, old_fruit)
-  streamlit.text(back_from_function)
+  my_data_rows = get_fruit_load_list()
+  my_cnx.close()
+  info = pandas.DataFrame(my_data_rows)
+  if old_fruit in info.values:
+    my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+    back_from_function = update_row_snowflake(new_fruit, old_fruit)
+    streamlit.text(back_from_function)
+  else:
+    streamlit.text("Please check the fields")
+
 
 ## STOP!!
 streamlit.stop()
