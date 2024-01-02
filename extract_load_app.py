@@ -11,7 +11,7 @@ from pandas.api.types import (
 )
 
 streamlit.title("From Streamlit to Snowflake")
-streamlit.header("Check out our fruit list!")
+streamlit.header("Check out our fruit list! '🥑'")
 
 #def get_fruityvice_data(this_fruit_choice):
 #  fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + this_fruit_choice)
@@ -128,7 +128,7 @@ snow_fruit = pandas.DataFrame(fruit_info)
 snow_fruit.columns = ["NAME", "ID", "FAMILY", "ORDER", "GENUS", "CALORIES", "FAT", "SUGAR", "CARBOHYDRATES", "PROTEIN"]
 #show_table = streamlit.dataframe(snow_fruit)
 
-modify = streamlit.checkbox("Add filters")
+modify = streamlit.checkbox("Apply filters to obtain the desired table")
 if not modify:
   snow_fruit
 else:
