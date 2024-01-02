@@ -122,11 +122,6 @@ if streamlit.button('Get info'):
   table_fruityvice = pandas.DataFrame(fruit_info)
   table_fruityvice.columns = ["NAME", "ID", "FAMILY", "ORDER", "GENUS", "CALORIES", "FAT", "SUGAR", "CARBOHYDRATES", "PROTEIN"]
   streamlit.dataframe(table_fruityvice)
-  filter_data(table_fruityvice)
-  
-
-# FILTERS 
-def filter_data(snow_fruit):
   modify = streamlit.checkbox("Add filters")
   if not modify:
     return snow_fruit
@@ -153,7 +148,6 @@ def filter_data(snow_fruit):
           step=step,)
         snow_fruit = snow_fruit[snow_fruit[column].between(*user_input_num)]
 
-    return snow_fruit
 
 
 
