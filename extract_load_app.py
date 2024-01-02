@@ -23,8 +23,7 @@ def snowflake_table():
   my_cnx.close()
   table = pandas.DataFrame(my_data_rows)
   table.columns = ["Fruits"]
-  info = streamlit.dataframe(table)
-  return info
+  return table
 
 streamlit.header("Fruityvice Fruit Advice!")
 try:
@@ -38,7 +37,8 @@ except URLError as e:
   streamlit.error()
 
 if streamlit.button('Get Fruit List'):
-  snowflake_table()
+  snow_table = snowflake_table()
+  info = streamlit.dataframe(snow_table)
 
 # FUNCTIONS: ADD, REMOVE, UPDATE
 def insert_row_snowflake(new_fruit):
