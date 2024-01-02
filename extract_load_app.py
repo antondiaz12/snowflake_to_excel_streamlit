@@ -6,7 +6,7 @@ from urllib.error import URLError
 
 streamlit.title("Import - from Streamlit to Snowflake")
 
-##  
+
 def get_fruityvice_data(this_fruit_choice):
   fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + this_fruit_choice)
   fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
@@ -34,7 +34,8 @@ if streamlit.button('Get Fruit List'):
   my_data_rows = get_fruit_load_list()
   my_cnx.close()
   table = pandas.DataFrame(my_data_rows)
-  table.columns = ["Fruits"]
+  table.set_index("Fruits", inplace=True)
+  #table.columns = ["Fruits"]
   info = streamlit.dataframe(table)
 
 
