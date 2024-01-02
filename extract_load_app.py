@@ -37,8 +37,12 @@ except URLError as e:
   streamlit.error()
 
 if streamlit.button('Get Fruit List'):
-  snow_table = snowflake_table()
-  streamlit.dataframe(snow_table)
+  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+  my_data_rows = get_fruit_load_list()
+  my_cnx.close()
+  table = pandas.DataFrame(my_data_rows)
+  table.columns = ["Fruits"]
+  streamlit.dataframe(table)
 
 # FUNCTIONS: ADD, REMOVE, UPDATE
 def insert_row_snowflake(new_fruit):
