@@ -69,8 +69,7 @@ if streamlit.button('Click to add data'):
       back_from_function = insert_row_snowflake(fruit_box)
     else:
       "That fruit is already on the list"
-except URLError as e:
-  streamlit.error()
+
   
 # -- REMOVE 
 streamlit.header("Would you like to remove a fruit?")
