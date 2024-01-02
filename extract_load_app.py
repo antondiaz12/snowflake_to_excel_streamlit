@@ -41,7 +41,7 @@ if streamlit.button('Get Fruit List'):
   my_data_rows = get_fruit_load_list()
   my_cnx.close()
   table = pandas.DataFrame(my_data_rows)
-  table.columns = ["Fruits"]
+  #table.columns = ["Fruits"]
   info = streamlit.dataframe(table)
 
 # FUNCTIONS: ADD, REMOVE, UPDATE
