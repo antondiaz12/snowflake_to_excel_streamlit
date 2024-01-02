@@ -64,7 +64,7 @@ if streamlit.button('Click to add data'):
     my_data_rows = get_fruit_load_list()
     my_cnx.close()
     info = pandas.DataFrame(my_data_rows)
-    if add_fruit not in info.values:
+    if add_fruit.lower() not in info.values:
       my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
       back_from_function = insert_row_snowflake(add_fruit)
       streamlit.text(back_from_function)
@@ -86,7 +86,7 @@ try:
     if fruit_box in info.values:
       my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
       back_from_function = remove_row_snowflake(fruit_box)
-      streamlit.text('Data removed!')
+      streamlit.text(back_from_function)
     else:
       streamlit.text('Please enter a valid fruit')
 except URLError as e:
