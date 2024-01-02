@@ -140,7 +140,7 @@ else:
       if is_categorical_dtype(snow_fruit[column]) or snow_fruit[column].nunique() < 10:
         user_input = right.multiselect(
           f"Values for {column}", 
-          df[column].unique(),
+          snow_fruit[column].unique(),
           default=list(snow_fruit[column].unique()),)
         snow_fruit = snow_fruit[snow_fruit[column].isin(user_input)]
       elif is_numeric_dtype(snow_fruit[column]):
