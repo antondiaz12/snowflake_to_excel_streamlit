@@ -42,8 +42,9 @@ def insert_row_snowflake(new_fruit):
   my_data_rows = get_fruit_load_list()
   my_cnx.close()
   table = pandas.DataFrame(my_data_rows)
+  info = pandas.DataFrame(my_data_rows)
   with my_cnx.cursor() as my_cur:
-    if new_fruit not in table:
+    if new_fruit not in info.values:
       my_cur.execute("insert into fruit_load_list(FRUIT_NAME) values ('"+new_fruit.lower()+"')")
       message = "Thanks for adding fruit data"
     else:
