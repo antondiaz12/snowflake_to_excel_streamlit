@@ -55,21 +55,20 @@ def update_row_snowflake(update_fruit, old_fruit):
 
 # -- ADD
 streamlit.header("Would you like to add a fruit?")
-try:
-  add_fruit = streamlit.text_input('Add a fruit')
-  if not add_fruit:
-    streamlit.text("Please add a fruit")
-  else:
+add_fruit = streamlit.text_input('Add a fruit')
+if not add_fruit:
+  streamlit.text("Please add a fruit")
+else:
+  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+  my_data_rows = get_fruit_load_list()
+  my_cnx.close()
+  info = pandas.DataFrame(my_data_rows)
+  if add_fruit not in info.values:
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-    my_data_rows = get_fruit_load_list()
-    my_cnx.close()
-    info = pandas.DataFrame(my_data_rows)
-    if add_fruit not in info.values:
-      my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-      back_from_function = insert_row_snowflake(add_fruit)
-      streamlit.text(back_from_function)
-    elif add_fruit in info.values:
-      streamlit.text("That fruit is already on the list")
+    back_from_function = insert_row_snowflake(add_fruit)
+    streamlit.text(back_from_function)
+  elif add_fruit in info.values:
+    streamlit.text("That fruit is already on the list")
 
   
 # -- REMOVE 
