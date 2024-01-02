@@ -40,18 +40,18 @@ if streamlit.button('Get Fruit List'):
 def insert_row_snowflake(new_fruit):
   with my_cnx.cursor() as my_cur:
       my_cur.execute("insert into fruit_load_list(FRUIT_NAME) values ('"+new_fruit.lower()+"')")
-      message = "Thanks for adding fruit data"
+      message = "Fruit added!"
       return message
 
 def remove_row_snowflake(remove_fruit):
   with my_cnx.cursor() as my_cur:
     my_cur.execute("delete from fruit_load_list where FRUIT_NAME = ('"+remove_fruit+"')")
-    return "Thanks for removing fruit data!"
+    return "Data removed!"
 
 def update_row_snowflake(update_fruit, old_fruit):
   with my_cnx.cursor() as my_cur:
     my_cur.execute("update fruit_load_list set FRUIT_NAME = ('"+update_fruit+"') WHERE FRUIT_NAME = ('"+old_fruit+"'")
-    return "Thanks for updating fruit data!"
+    return "Data updated!"
 
 # -- ADD
 streamlit.header("Would you like to add a fruit?")
