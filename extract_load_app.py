@@ -120,10 +120,11 @@ fruit_info = fruityvice_selected()
 my_cnx.close()
 snow_fruit = pandas.DataFrame(fruit_info)
 snow_fruit.columns = ["NAME", "ID", "FAMILY", "ORDER", "GENUS", "CALORIES", "FAT", "SUGAR", "CARBOHYDRATES", "PROTEIN"]
-show_table = streamlit.dataframe(snow_fruit)
+#show_table = streamlit.dataframe(snow_fruit)
+
 modify = streamlit.checkbox("Add filters")
 if not modify:
-  show_table
+  snow_fruit
 else:
   container = streamlit.container()
   with container:
