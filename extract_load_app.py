@@ -52,6 +52,12 @@ def update_row_snowflake(update_fruit, old_fruit):
     my_cur.execute("update fruit_load_list set FRUIT_NAME = ('"+update_fruit+"') WHERE FRUIT_NAME = ('"+old_fruit+"')")
     return "Data updated!"
 
+def fruityvice_selected():
+  with my_cnx.cursor() as my_cur:
+      my_cur.execute("select * from fruit_load_list join fruityvice_table on lower(name) = fruit_name")
+      return my_cur.fetchall()
+    
+
 # -- ADD
 streamlit.header("Would you like to add a fruit?")
 add_fruit = streamlit.text_input('Write a fruit 🍌')
@@ -106,6 +112,14 @@ else:
     streamlit.text(back_from_function)
   else:
     streamlit.text("Please check the fields")
+
+## TABLE 
+if streamlit.button('Get detailed information about the fruit list'):
+  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+  fruit_info = fruityvice_selected()
+  my_cnx.close()
+  table = pandas.DataFrame(fruit_info)
+  streamlit.dataframe(table)
 
 
 ## STOP!!
