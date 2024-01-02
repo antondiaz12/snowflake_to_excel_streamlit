@@ -4,7 +4,7 @@ import requests #New section to display fruityvice API response
 import snowflake.connector
 from urllib.error import URLError
 
-streamlit.title("Import - from Streamlit to Snowflake")
+streamlit.title("From Streamlit to Snowflake")
 
 
 def get_fruityvice_data(this_fruit_choice):
@@ -54,7 +54,7 @@ def update_row_snowflake(update_fruit, old_fruit):
 
 # -- ADD
 streamlit.header("Would you like to add a fruit?")
-add_fruit = streamlit.text_input('Add a fruit')
+add_fruit = streamlit.text_input('Add a fruit 🍌')
 if not add_fruit:
   streamlit.text("Please add a fruit")
 else:
@@ -72,7 +72,7 @@ else:
   
 # -- REMOVE 
 streamlit.header("Would you like to remove a fruit?")
-fruit_box = streamlit.text_input('Specify the fruit')
+fruit_box = streamlit.text_input('Specify the fruit 🥝')
 if not fruit_box:
   streamlit.text("Please select a fruit from the list")
 else:
@@ -90,8 +90,8 @@ else:
 
 # -- UPDATE
 streamlit.header("Would you like to update a fruit?")
-old_fruit = streamlit.text_input('Which fruit to update?')
-new_fruit = streamlit.text_input('Write the change')
+old_fruit = streamlit.text_input('Which fruit to update? 🍇')
+new_fruit = streamlit.text_input('Write the change 🥭')
 if not old_fruit or not new_fruit:
   streamlit.text("Please check the fields")
 else:
