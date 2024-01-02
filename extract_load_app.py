@@ -5,19 +5,19 @@ import snowflake.connector
 from urllib.error import URLError
 
 streamlit.title("From Streamlit to Snowflake")
+streamlit.header("Check out our fruit list!")
 
-
-def get_fruityvice_data(this_fruit_choice):
+'''def get_fruityvice_data(this_fruit_choice):
   fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + this_fruit_choice)
   fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
-  return fruityvice_normalized
+  return fruityvice_normalized'''
 
 def get_fruit_load_list():
   with my_cnx.cursor() as my_cur:
         my_cur.execute("select * from fruit_load_list")
         return my_cur.fetchall()
     
-streamlit.header("Fruityvice Fruit Advice!")
+'''streamlit.header("Fruityvice Fruit Advice!")
 try:
   fruit_choice = streamlit.text_input('What fruit would you like information about?')
   if not fruit_choice:
@@ -26,7 +26,7 @@ try:
     back_from_function = get_fruityvice_data(fruit_choice)
     streamlit.dataframe(back_from_function)
 except URLError as e:
-  streamlit.error()
+  streamlit.error()'''
 
 if streamlit.button('Get Fruit List'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
@@ -54,7 +54,7 @@ def update_row_snowflake(update_fruit, old_fruit):
 
 def fruityvice_selected():
   with my_cnx.cursor() as my_cur:
-      my_cur.execute("select * from fruit_load_list join fruityvice_table on lower(name) = fruit_name")
+      my_cur.execute("select fruit_name, id, family, orders, genus, calories, fat, sugar, carbohydrates, protein from fruit_load_list join fruityvice_table on lower(name) = fruit_name")
       return my_cur.fetchall()
     
 
@@ -114,11 +114,13 @@ else:
     streamlit.text("Please check the fields")
 
 ## TABLE 
-if streamlit.button('Get detailed information about the fruit list'):
+streamlit.header("More detailed information about the list of fruits!!")
+if streamlit.button('Get info'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
   fruit_info = fruityvice_selected()
   my_cnx.close()
   table = pandas.DataFrame(fruit_info)
+  table.columns = ["NAME", "ID", "FAMILY", "ORDER", "GENUS", "CALORIES", "FAT", "SUGAR", "CARBOHYDRATES", "PROTEIN"]
   streamlit.dataframe(table)
 
 
