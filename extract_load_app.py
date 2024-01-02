@@ -113,15 +113,50 @@ else:
   else:
     streamlit.text("Please check the fields")
 
-## TABLE 
+# TABLE WITH ALL THE INFO 
 streamlit.header("See detailed information on each fruit")
 if streamlit.button('Get info'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
   fruit_info = fruityvice_selected()
   my_cnx.close()
-  table = pandas.DataFrame(fruit_info)
-  table.columns = ["NAME", "ID", "FAMILY", "ORDER", "GENUS", "CALORIES", "FAT", "SUGAR", "CARBOHYDRATES", "PROTEIN"]
-  streamlit.dataframe(table)
+  table_fruityvice = pandas.DataFrame(fruit_info)
+  table_fruityvice.columns = ["NAME", "ID", "FAMILY", "ORDER", "GENUS", "CALORIES", "FAT", "SUGAR", "CARBOHYDRATES", "PROTEIN"]
+  streamlit.dataframe(table_fruityvice)
+  filter_data(table_fruityvice)
+  
+
+# FILTERS 
+def filter_data(snow_fruit):
+  modify = streamlit.checkbox("Add filters")
+  if not modify:
+    return snow_fruit
+  container = streamlit.container()
+  with container:
+    filter_columns = streamlit.multiselect("Choose filters", snow_fruit.columns)
+    for column in filter_columns:
+      left, right = streamlit.columns((1,20))
+      if is_categorical_dtype(snow_fruit[column]) or snow_fruit[column].unique() < 10:
+        user_input = right.multiselect(
+          f"Values for {column}", 
+          df[column].unique(),
+          default=list(snow_fruit[column].unique()),)
+        snow_fruit = snow_fruit[snow_fruit[column].isin(user_input)]
+      elif is_numeric_dtype(snow_fruit[column]):
+        _min = float(snow_fruit[column].min())
+        _max = float(snow_fruit[column].max())
+        step = (_max - _min) / 100
+        user_input_num = right.slider(
+          f"Values for {column}",
+          min_value = _min,
+          max_value = _max,
+          value = (_min, _max),
+          step=step,)
+        snow_fruit = snow_fruit[snow_fruit[column].between(*user_input_num)]
+
+    return snow_fruit
+
+
+
 
 
 ## STOP!!
