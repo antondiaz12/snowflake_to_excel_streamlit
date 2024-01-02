@@ -121,33 +121,32 @@ my_cnx.close()
 snow_fruit = pandas.DataFrame(fruit_info)
 snow_fruit.columns = ["NAME", "ID", "FAMILY", "ORDER", "GENUS", "CALORIES", "FAT", "SUGAR", "CARBOHYDRATES", "PROTEIN"]
 streamlit.dataframe(snow_fruit)
-
-  modify = streamlit.checkbox("Add filters")
-  if not modify:
-    snow_fruit
-  else:
-    container = streamlit.container()
-    with container:
-      filter_columns = streamlit.multiselect("Choose filters", snow_fruit.columns)
-      for column in filter_columns:
-        left, right = streamlit.columns((1,20))
-        if is_categorical_dtype(snow_fruit[column]) or snow_fruit[column].unique() < 10:
-          user_input = right.multiselect(
-            f"Values for {column}", 
-            df[column].unique(),
-            default=list(snow_fruit[column].unique()),)
-          snow_fruit = snow_fruit[snow_fruit[column].isin(user_input)]
-        elif is_numeric_dtype(snow_fruit[column]):
-          _min = float(snow_fruit[column].min())
-          _max = float(snow_fruit[column].max())
-          step = (_max - _min) / 100
-          user_input_num = right.slider(
-            f"Values for {column}",
-            min_value = _min,
-            max_value = _max,
-            value = (_min, _max),
-            step=step,)
-          snow_fruit = snow_fruit[snow_fruit[column].between(*user_input_num)]
+modify = streamlit.checkbox("Add filters")
+if not modify:
+  snow_fruit
+else:
+  container = streamlit.container()
+  with container:
+    filter_columns = streamlit.multiselect("Choose filters", snow_fruit.columns)
+    for column in filter_columns:
+      left, right = streamlit.columns((1,20))
+      if is_categorical_dtype(snow_fruit[column]) or snow_fruit[column].unique() < 10:
+        user_input = right.multiselect(
+          f"Values for {column}", 
+          df[column].unique(),
+          default=list(snow_fruit[column].unique()),)
+        snow_fruit = snow_fruit[snow_fruit[column].isin(user_input)]
+      elif is_numeric_dtype(snow_fruit[column]):
+        _min = float(snow_fruit[column].min())
+        _max = float(snow_fruit[column].max())
+        step = (_max - _min) / 100
+        user_input_num = right.slider(
+          f"Values for {column}",
+          min_value = _min,
+          max_value = _max,
+          value = (_min, _max),
+          step=step,)
+        snow_fruit = snow_fruit[snow_fruit[column].between(*user_input_num)]
 
 
 ## STOP!!
