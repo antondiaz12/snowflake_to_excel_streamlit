@@ -17,13 +17,6 @@ def get_fruit_load_list():
         my_cur.execute("select * from fruit_load_list")
         return my_cur.fetchall()
     
-def snow_table():
-  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-  my_data_rows = get_fruit_load_list()
-  my_cnx.close()
-  return my_data_rows
-  
-
 streamlit.header("Fruityvice Fruit Advice!")
 try:
   fruit_choice = streamlit.text_input('What fruit would you like information about?')
@@ -36,11 +29,10 @@ except URLError as e:
   streamlit.error()
 
 if streamlit.button('Get Fruit List'):
-  #my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-  #my_data_rows = get_fruit_load_list()
-  #my_cnx.close()
-  table = snow_table()
-  table = pandas.DataFrame(table)
+  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+  my_data_rows = get_fruit_load_list()
+  my_cnx.close()
+  table = pandas.DataFrame(my_data_rows)
   table.columns = ["Fruits"]
   streamlit.dataframe(table)
 
