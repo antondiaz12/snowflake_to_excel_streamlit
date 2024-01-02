@@ -68,7 +68,7 @@ if streamlit.button('Click to add data'):
       my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
       back_from_function = insert_row_snowflake(add_fruit)
       streamlit.text(back_from_function)
-    else:
+    elif add_fruit.lower() in info.values:
       streamlit.text("That fruit is already on the list")
 
   
