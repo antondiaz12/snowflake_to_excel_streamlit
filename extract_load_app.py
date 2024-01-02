@@ -38,14 +38,12 @@ if streamlit.button('Get Fruit List'):
 
 # FUNCTIONS: ADD, REMOVE, UPDATE
 def insert_row_snowflake(new_fruit):
-  with my_cnx.cursor() as my_cur:
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
     my_data_rows = get_fruit_load_list()
     my_cnx.close()
     table = pandas.DataFrame(my_data_rows)
-    #table.columns = ["Fruits"]
-    info = streamlit.dataframe(table)
-    if new_fruit not in info:
+  with my_cnx.cursor() as my_cur:
+    if new_fruit not in table:
       my_cur.execute("insert into fruit_load_list(FRUIT_NAME) values ('"+new_fruit.lower()+"')")
       message = "Thanks for adding fruit data"
     else:
