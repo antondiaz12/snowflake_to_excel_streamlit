@@ -16,6 +16,13 @@ def get_fruit_load_list():
   with my_cnx.cursor() as my_cur:
         my_cur.execute("select * from fruit_load_list")
         return my_cur.fetchall()
+    
+def snow_table():
+  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+  my_data_rows = get_fruit_load_list()
+  my_cnx.close()
+  return my_data_rows
+  
 
 streamlit.header("Fruityvice Fruit Advice!")
 try:
@@ -29,10 +36,11 @@ except URLError as e:
   streamlit.error()
 
 if streamlit.button('Get Fruit List'):
-  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-  my_data_rows = get_fruit_load_list()
-  my_cnx.close()
-  table = pandas.DataFrame(my_data_rows)
+  #my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+  #my_data_rows = get_fruit_load_list()
+  #my_cnx.close()
+  table = snow_table()
+  table = pandas.DataFrame(table)
   table.columns = ["Fruits"]
   streamlit.dataframe(table)
 
@@ -55,6 +63,7 @@ def update_row_snowflake(update_fruit, old_fruit):
 # -- ADD
 streamlit.header("Would you like to add a fruit?")
 add_fruit = streamlit.text_input('Write a fruit 🍌')
+add_fruit = add_fruit.lower()
 if not add_fruit:
   streamlit.text("Please add a fruit")
 else:
