@@ -66,9 +66,10 @@ if streamlit.button('Click to add data'):
     info = pandas.DataFrame(my_data_rows)
     if add_fruit not in info.values:
       my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-      back_from_function = insert_row_snowflake(fruit_box)
+      back_from_function = insert_row_snowflake(add_fruit)
+      streamlit.text(back_from_function)
     else:
-      "That fruit is already on the list"
+      streamlit.text("That fruit is already on the list")
 
   
 # -- REMOVE 
