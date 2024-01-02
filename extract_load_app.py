@@ -11,7 +11,7 @@ from pandas.api.types import (
 )
 
 streamlit.title("From Streamlit to Snowflake")
-streamlit.header("Check out our fruit list! '🥑'")
+streamlit.header("Check out our fruit list!")
 
 #def get_fruityvice_data(this_fruit_choice):
 #  fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + this_fruit_choice)
@@ -34,7 +34,7 @@ def get_fruit_load_list():
 #except URLError as e:
 #  streamlit.error()
 
-if streamlit.button('Get Fruit List'):
+if streamlit.button('Get Fruit List 🥑'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
   my_data_rows = get_fruit_load_list()
   my_cnx.close()
@@ -154,7 +154,7 @@ else:
           value = (_min, _max),
           step=step,)
         snow_fruit = snow_fruit[snow_fruit[column].between(*user_input_num)]
-snow_fruit
+    snow_fruit
 
 
 ## STOP!!
