@@ -42,7 +42,7 @@ if streamlit.button('Get Fruit List'):
   my_cnx.close()
   table = pandas.DataFrame(my_data_rows)
   table.columns = ["Fruits"]
-  streamlit.dataframe(table)
+  info = streamlit.dataframe(table)
 
 # FUNCTIONS: ADD, REMOVE, UPDATE
 def insert_row_snowflake(new_fruit):
