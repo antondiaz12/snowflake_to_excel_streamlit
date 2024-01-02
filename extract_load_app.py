@@ -3,6 +3,12 @@ import pandas
 import requests #New section to display fruityvice API response
 import snowflake.connector
 from urllib.error import URLError
+from pandas.api.types import (
+    is_categorical_dtype,
+    is_datetime64_any_dtype,
+    is_numeric_dtype,
+    is_object_dtype,
+)
 
 streamlit.title("From Streamlit to Snowflake")
 streamlit.header("Check out our fruit list!")
