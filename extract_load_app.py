@@ -12,6 +12,11 @@ def get_fruityvice_data(this_fruit_choice):
   fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
   return fruityvice_normalized
 
+def get_fruit_load_list():
+  with my_cnx.cursor() as my_cur:
+        my_cur.execute("select * from fruit_load_list")
+        return my_cur.fetchall()
+
 streamlit.header("Fruityvice Fruit Advice!")
 try:
   fruit_choice = streamlit.text_input('What fruit would you like information about?')
@@ -23,12 +28,6 @@ try:
 except URLError as e:
   streamlit.error()
 
-  streamlit.header("View Our Fruit List - Add You Favorites!")
-def get_fruit_load_list():
-  with my_cnx.cursor() as my_cur:
-        my_cur.execute("select * from fruit_load_list")
-        return my_cur.fetchall()
-
 if streamlit.button('Get Fruit List'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
   my_data_rows = get_fruit_load_list()
@@ -37,11 +36,14 @@ if streamlit.button('Get Fruit List'):
   table.columns = ["Fruits"]
   info = streamlit.dataframe(table)
 
-
+# FUNCTIONS: ADD, REMOVE, UPDATE
 def insert_row_snowflake(new_fruit):
   with my_cnx.cursor() as my_cur:
-    my_cur.execute("insert into fruit_load_list(FRUIT_NAME) values ('"+new_fruit.lower()+"')")
-    return "Thanks for adding fruit data"
+    if new_fruit not in table:
+      my_cur.execute("insert into fruit_load_list(FRUIT_NAME) values ('"+new_fruit.lower()+"')")
+    else:
+      "This fruit is already in the list"
+  return "Thanks for adding fruit data"
 
 def remove_row_snowflake(remove_fruit):
   with my_cnx.cursor() as my_cur:
@@ -52,7 +54,8 @@ def update_row_snowflake(update_fruit, old_fruit):
   with my_cnx.cursor() as my_cur:
     my_cur.execute("update fruit_load_list set FRUIT_NAME = ('"+update_fruit+"') WHERE FRUIT_NAME = ('"+old_fruit+"'")
     return "Thanks for updating fruit data!"
-    
+
+# -- ADD
 streamlit.header("Would you like to add a fruit?")
 add_fruit = streamlit.text_input('Add a fruit')
 if streamlit.button('Click to add data'):
@@ -60,6 +63,7 @@ if streamlit.button('Click to add data'):
   back_from_function = insert_row_snowflake(add_fruit)
   streamlit.text(back_from_function)
 
+# -- REMOVE 
 streamlit.header("Would you like to remove a fruit?")
 try:
   fruit_box = streamlit.text_input('Specify the fruit')
@@ -79,8 +83,7 @@ try:
 except URLError as e:
   streamlit.error()
 
-
-
+# -- UPDATE
 streamlit.header("Would you like to update a fruit?")
 old_fruit = streamlit.text_input('Which fruit to update?')
 new_fruit = streamlit.text_input('Write the update')
