@@ -17,6 +17,15 @@ def get_fruit_load_list():
         my_cur.execute("select * from fruit_load_list")
         return my_cur.fetchall()
 
+def snowflake_table():
+  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+  my_data_rows = get_fruit_load_list()
+  my_cnx.close()
+  table = pandas.DataFrame(my_data_rows)
+  table.columns = ["Fruits"]
+  info = streamlit.dataframe(table)
+  return info
+
 streamlit.header("Fruityvice Fruit Advice!")
 try:
   fruit_choice = streamlit.text_input('What fruit would you like information about?')
@@ -29,17 +38,13 @@ except URLError as e:
   streamlit.error()
 
 if streamlit.button('Get Fruit List'):
-  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-  my_data_rows = get_fruit_load_list()
-  my_cnx.close()
-  table = pandas.DataFrame(my_data_rows)
-  table.columns = ["Fruits"]
-  info = streamlit.dataframe(table)
+  snowflake_table()
 
 # FUNCTIONS: ADD, REMOVE, UPDATE
 def insert_row_snowflake(new_fruit):
   with my_cnx.cursor() as my_cur:
-    if new_fruit not in table:
+    snow_table = snowflake_table()
+    if new_fruit not in snow_table:
       my_cur.execute("insert into fruit_load_list(FRUIT_NAME) values ('"+new_fruit.lower()+"')")
       message = "Thanks for adding fruit data"
     else:
