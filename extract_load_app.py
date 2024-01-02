@@ -120,17 +120,17 @@ fruit_info = fruityvice_selected()
 my_cnx.close()
 snow_fruit = pandas.DataFrame(fruit_info)
 snow_fruit.columns = ["NAME", "ID", "FAMILY", "ORDER", "GENUS", "CALORIES", "FAT", "SUGAR", "CARBOHYDRATES", "PROTEIN"]
-streamlit.dataframe(snow_fruit)
+show_table = streamlit.dataframe(snow_fruit)
 modify = streamlit.checkbox("Add filters")
 if not modify:
-  snow_fruit
+  show_table
 else:
   container = streamlit.container()
   with container:
     filter_columns = streamlit.multiselect("Choose filters", snow_fruit.columns)
     for column in filter_columns:
       left, right = streamlit.columns((1,20))
-      if is_categorical_dtype(snow_fruit[column]) or snow_fruit[column].unique() < 10:
+      if is_categorical_dtype(snow_fruit[column]) or snow_fruit[column].nunique() < 10:
         user_input = right.multiselect(
           f"Values for {column}", 
           df[column].unique(),
