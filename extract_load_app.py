@@ -54,7 +54,7 @@ def update_row_snowflake(update_fruit, old_fruit):
 
 # -- ADD
 streamlit.header("Would you like to add a fruit?")
-add_fruit = streamlit.text_input('Add a fruit 🍌')
+add_fruit = streamlit.text_input('Write a fruit 🍌')
 if not add_fruit:
   streamlit.text("Please add a fruit")
 else:
