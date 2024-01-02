@@ -134,7 +134,7 @@ if not modify:
 else:
   container = streamlit.container()
   with container:
-    filter_columns = streamlit.multiselect("Choose filters", snow_fruit.columns)
+    filter_columns = streamlit.multiselect("Choose the columns you want to filter", snow_fruit.columns)
     for column in filter_columns:
       left, right = streamlit.columns((1,20))
       if is_categorical_dtype(snow_fruit[column]) or snow_fruit[column].nunique() < 10:
@@ -154,6 +154,7 @@ else:
           value = (_min, _max),
           step=step,)
         snow_fruit = snow_fruit[snow_fruit[column].between(*user_input_num)]
+snow_fruit
 
 
 ## STOP!!
