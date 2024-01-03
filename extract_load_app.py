@@ -10,7 +10,7 @@ from pandas.api.types import (
     is_object_dtype,
 )
 
-streamlit.title("From Streamlit to Snowflake")
+streamlit.title("From Snowflake to Streamlit")
 streamlit.header("Check out our fruit list!")
 
 #def get_fruityvice_data(this_fruit_choice):
@@ -104,7 +104,7 @@ else:
 # -- UPDATE
 streamlit.header("Would you like to update a fruit?")
 old_fruit = streamlit.text_input('Which fruit to update? 🍇')
-new_fruit = streamlit.text_input('Write the change 🥭')
+new_fruit = streamlit.text_input('Type the change 🥭')
 if not old_fruit or not new_fruit:
   streamlit.text("Please check the fields")
 else:
@@ -120,7 +120,7 @@ else:
     streamlit.text("Please check the fields")
 
 # TABLE WITH ALL THE INFO 
-streamlit.header("See detailed information on each fruit")
+streamlit.header("See detailed information of each fruit")
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 fruit_info = fruityvice_selected()
 my_cnx.close()
