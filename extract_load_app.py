@@ -31,17 +31,17 @@ if streamlit.button('🥑 Get Fruit List 🥑'):
 
 def insert_row_snowflake(new_fruit):
   with my_cnx.cursor() as my_cur:
-      my_cur.execute("insert into fruit_load_list(FRUIT_NAME) values ('"+new_fruit.lower()+"')")
+      my_cur.execute("insert into fruit_load_list(FRUIT_NAME) values ('"+new_fruit+"')")
       return "Fruit added!"
 
 def remove_row_snowflake(remove_fruit):
   with my_cnx.cursor() as my_cur:
-    my_cur.execute("delete from fruit_load_list where FRUIT_NAME = ('"+remove_fruit.lower()+"')")
+    my_cur.execute("delete from fruit_load_list where FRUIT_NAME = ('"+remove_fruit+"')")
     return "Data removed!"
 
 def update_row_snowflake(update_fruit, old_fruit):
   with my_cnx.cursor() as my_cur:
-    my_cur.execute("update fruit_load_list set FRUIT_NAME = ('"+update_fruit.lower()+"') WHERE FRUIT_NAME = ('"+old_fruit.lower()+"')")
+    my_cur.execute("update fruit_load_list set FRUIT_NAME = ('"+update_fruit+"') WHERE FRUIT_NAME = ('"+old_fruit+"')")
     return "Data updated!"
 
 def fruityvice_selected():
@@ -52,6 +52,7 @@ def fruityvice_selected():
 # ----------- ACTION: ADD -----------
 streamlit.header("Would you like to add a fruit?")
 add_fruit = streamlit.text_input('Write a fruit 🍌')
+add_fruit = add_fruit.lower()
 if not add_fruit:
   streamlit.text("Please add a fruit")
 else:
@@ -69,6 +70,7 @@ else:
 # ----------- ACTION: REMOVE ----------
 streamlit.header("Would you like to remove a fruit?")
 fruit_box = streamlit.text_input('Specify the fruit 🥝')
+fruit_box = fruit_box.lower()
 if not fruit_box:
   streamlit.text("Please select a fruit from the list")
 else:
@@ -87,6 +89,8 @@ else:
 streamlit.header("Would you like to update a fruit?")
 old_fruit = streamlit.text_input('Which fruit to update? 🍇')
 new_fruit = streamlit.text_input('Type the change 🥭')
+old_fruit = old_fruit.lower()
+new_fruit = new_fruit.lower()
 if not old_fruit or not new_fruit:
   streamlit.text("Please check the fields")
 else:
