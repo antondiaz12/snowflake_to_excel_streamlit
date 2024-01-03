@@ -14,8 +14,6 @@ from pandas.api.types import (
 streamlit.title("From Snowflake to Streamlit")
 streamlit.header("Check out our fruit list!")
 
-# --------- INITIAL BUTTON ---------- 
-
 # ----------- FUNCTIONS ------------
 def get_fruit_load_list():
   with my_cnx.cursor() as my_cur:
@@ -109,7 +107,7 @@ my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 fruit_info = fruityvice_selected()
 my_cnx.close()
 snow_fruit = pandas.DataFrame(fruit_info)
-snow_fruit.columns = ["NAME", "ID", "FAMILY", "ORDER", "GENUS", "CALORIES", "FAT", "SUGAR", "CARBOHYDRATES", "PROTEIN"]
+snow_fruit.columns = ["FRUIT_NAME", "ID", "FAMILY", "ORDER", "GENUS", "CALORIES", "FAT", "SUGAR", "CARBOHYDRATES", "PROTEIN"]
 #show_table = streamlit.dataframe(snow_fruit)
 
 modify = streamlit.checkbox("Apply filters to obtain the desired table")
