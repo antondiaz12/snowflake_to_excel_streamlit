@@ -46,7 +46,7 @@ def update_row_snowflake(update_fruit, old_fruit):
 
 def fruityvice_selected():
   with my_cnx.cursor() as my_cur:
-      my_cur.execute("select fruit_name, id, family, orders, genus, calories, fat, sugar, carbohydrates, protein from fruit_load_list join fruityvice_table on lower(name) = fruit_name")
+      my_cur.execute("select name, id, family, orders, genus, calories, fat, sugar, carbohydrates, protein from fruit_load_list join fruityvice_table on lower(name) = fruit_name")
       return my_cur.fetchall()
 
 # ----------- ACTION: ADD -----------
@@ -107,7 +107,7 @@ my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 fruit_info = fruityvice_selected()
 my_cnx.close()
 snow_fruit = pandas.DataFrame(fruit_info)
-snow_fruit.columns = ["FRUIT_NAME", "ID", "FAMILY", "ORDER", "GENUS", "CALORIES", "FAT", "SUGAR", "CARBOHYDRATES", "PROTEIN"]
+snow_fruit.columns = ["NAME", "ID", "FAMILY", "ORDER", "GENUS", "CALORIES", "FAT", "SUGAR", "CARBOHYDRATES", "PROTEIN"]
 #show_table = streamlit.dataframe(snow_fruit)
 
 modify = streamlit.checkbox("Apply filters to obtain the desired table")
