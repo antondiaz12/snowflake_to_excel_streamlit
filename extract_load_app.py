@@ -10,30 +10,11 @@ from pandas.api.types import (
     is_object_dtype,
 )
 
+# ------------- HEADERS -------------
 streamlit.title("From Snowflake to Streamlit")
 streamlit.header("Check out our fruit list!")
 
-#def get_fruityvice_data(this_fruit_choice):
-#  fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + this_fruit_choice)
-#  fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
-#  return fruityvice_normalized
-
-def get_fruit_load_list():
-  with my_cnx.cursor() as my_cur:
-        my_cur.execute("select * from fruit_load_list")
-        return my_cur.fetchall()
-    
-#streamlit.header("Fruityvice Fruit Advice!")
-#try:
-#  fruit_choice = streamlit.text_input('What fruit would you like information about?')
-#  if not fruit_choice:
-#    streamlit.error("Please select a fruit to get information")
-#  else:
-#    back_from_function = get_fruityvice_data(fruit_choice)
-#    streamlit.dataframe(back_from_function)
-#except URLError as e:
-#  streamlit.error()
-
+# --------- INITIAL BUTTON ---------- 
 if streamlit.button('🥑 Get Fruit List 🥑'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
   my_data_rows = get_fruit_load_list()
@@ -42,7 +23,12 @@ if streamlit.button('🥑 Get Fruit List 🥑'):
   table.columns = ["Fruits"]
   streamlit.dataframe(table)
 
-# FUNCTIONS: ADD, REMOVE, UPDATE
+# ----------- FUNCTIONS ------------
+def get_fruit_load_list():
+  with my_cnx.cursor() as my_cur:
+        my_cur.execute("select * from fruit_load_list")
+        return my_cur.fetchall()
+
 def insert_row_snowflake(new_fruit):
   with my_cnx.cursor() as my_cur:
       my_cur.execute("insert into fruit_load_list(FRUIT_NAME) values ('"+new_fruit.lower()+"')")
@@ -62,9 +48,8 @@ def fruityvice_selected():
   with my_cnx.cursor() as my_cur:
       my_cur.execute("select fruit_name, id, family, orders, genus, calories, fat, sugar, carbohydrates, protein from fruit_load_list join fruityvice_table on lower(name) = fruit_name")
       return my_cur.fetchall()
-    
 
-# -- ADD
+# ----------- ACTION: ADD -----------
 streamlit.header("Would you like to add a fruit?")
 add_fruit = streamlit.text_input('Write a fruit 🍌')
 if not add_fruit:
@@ -81,8 +66,7 @@ else:
   elif add_fruit in info.values:
     streamlit.text("That fruit is already on the list")
 
-  
-# -- REMOVE 
+# ----------- ACTION: REMOVE ----------
 streamlit.header("Would you like to remove a fruit?")
 fruit_box = streamlit.text_input('Specify the fruit 🥝')
 if not fruit_box:
@@ -99,8 +83,7 @@ else:
   else:
     streamlit.text('Please enter a valid fruit')
 
-
-# -- UPDATE
+# ----------- ACTION: UPDATE -----------
 streamlit.header("Would you like to update a fruit?")
 old_fruit = streamlit.text_input('Which fruit to update? 🍇')
 new_fruit = streamlit.text_input('Type the change 🥭')
@@ -118,7 +101,7 @@ else:
   else:
     streamlit.text("Please check the fields")
 
-# TABLE WITH ALL THE INFO 
+# ----------- ACTION: FILTER ----------
 streamlit.header("See detailed information of each fruit")
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 fruit_info = fruityvice_selected()
@@ -155,6 +138,28 @@ else:
         snow_fruit = snow_fruit[snow_fruit[column].between(*user_input_num)]
     snow_fruit
 
+# -------- ACTION: EXPORT TO EXCEL ----------
 
-## STOP!!
+
+
+# -------------- ACTION: STOP  --------------
 streamlit.stop()
+
+
+# ---------------- DRAFT CODE -------------
+#def get_fruityvice_data(this_fruit_choice):
+#  fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + this_fruit_choice)
+#  fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
+#  return fruityvice_normalized
+    
+#streamlit.header("Fruityvice Fruit Advice!")
+#try:
+#  fruit_choice = streamlit.text_input('What fruit would you like information about?')
+#  if not fruit_choice:
+#    streamlit.error("Please select a fruit to get information")
+#  else:
+#    back_from_function = get_fruityvice_data(fruit_choice)
+#    streamlit.dataframe(back_from_function)
+#except URLError as e:
+#  streamlit.error()
+
