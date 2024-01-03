@@ -146,7 +146,7 @@ else:
       elif is_numeric_dtype(snow_fruit[column]):
         _min = float(snow_fruit[column].min())
         _max = float(snow_fruit[column].max())
-        step = (_max - _min) / 100
+        step = 4
         user_input_num = right.slider(
           f"Values for {column}",
           min_value = _min,
