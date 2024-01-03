@@ -50,12 +50,12 @@ def insert_row_snowflake(new_fruit):
 
 def remove_row_snowflake(remove_fruit):
   with my_cnx.cursor() as my_cur:
-    my_cur.execute("delete from fruit_load_list where FRUIT_NAME = ('"+remove_fruit+"')")
+    my_cur.execute("delete from fruit_load_list where FRUIT_NAME = ('"+remove_fruit.lower()+"')")
     return "Data removed!"
 
 def update_row_snowflake(update_fruit, old_fruit):
   with my_cnx.cursor() as my_cur:
-    my_cur.execute("update fruit_load_list set FRUIT_NAME = ('"+update_fruit+"') WHERE FRUIT_NAME = ('"+old_fruit+"')")
+    my_cur.execute("update fruit_load_list set FRUIT_NAME = ('"+update_fruit.lower()+"') WHERE FRUIT_NAME = ('"+old_fruit.lower()+"')")
     return "Data updated!"
 
 def fruityvice_selected():
@@ -67,7 +67,6 @@ def fruityvice_selected():
 # -- ADD
 streamlit.header("Would you like to add a fruit?")
 add_fruit = streamlit.text_input('Write a fruit 🍌')
-add_fruit = add_fruit.lower()
 if not add_fruit:
   streamlit.text("Please add a fruit")
 else:
