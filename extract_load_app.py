@@ -11,7 +11,7 @@ from pandas.api.types import (
     is_object_dtype,
 )
 
-import pip3
+import pip
 pip.main(['install', 'openpyxl==2.1.4'])
 
 #sudo -H pip3 install --upgrade pip
