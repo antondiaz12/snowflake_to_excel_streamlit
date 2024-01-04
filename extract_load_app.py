@@ -10,8 +10,22 @@ from pandas.api.types import (
     is_numeric_dtype,
     is_object_dtype,
 )
-sudo apt-get install python-openpyxl
-sudo apt-get install python3-openpyxl
+pip install openpyxl
+# For pip3:
+pip3 install openpyxl
+python -m pip install openpyxl
+
+python3 -m pip install openpyxl
+
+# Windows
+py -m pip install openpyxl
+
+# Anaconda
+conda install openpyxl
+
+# Jupyter Notebook
+!pip install openpyxl
+
 
 
 # ------------- HEADERS -------------
