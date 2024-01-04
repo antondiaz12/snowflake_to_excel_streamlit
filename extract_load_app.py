@@ -145,7 +145,7 @@ else:
 
 # -------- ACTION: EXPORT TO EXCEL ----------
 
-@streamlit.experimental_memo()
+@streamlit.experimental_memo(ttl=60, persist="disk")
 def create_xlsx(snow_fruit):
     buffer = io.BytesIO()
     with pandas.ExcelWriter(buffer) as writer:
@@ -159,6 +159,11 @@ if streamlit.download_button(
         mime="application/vnd.ms-excel"):
     
     st.write("thank you for downloading!")
+
+if st.button("Clear All"):
+    # Clear values from *all* memoized functions:
+    # i.e. clear values from both square and cube
+    st.experimental_memo.clear()
 
 # -------------- ACTION: STOP  --------------
 streamlit.stop()
