@@ -10,8 +10,8 @@ from pandas.api.types import (
     is_numeric_dtype,
     is_object_dtype,
 )
-$ pip install openpyxl
-
+sudo apt-get install python-openpyxl
+sudo apt-get install python3-openpyxl
 
 
 # ------------- HEADERS -------------
