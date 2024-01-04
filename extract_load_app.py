@@ -16,7 +16,7 @@ sys.path.append('/usr/lib/python3/dist-packages')
 import pip
 pip.main(["install", "openpyxl"])
 
-
+pip3 install openpyxl --user
 
 from openpyxl import Workbook
 from io import BytesIO
