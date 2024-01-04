@@ -10,6 +10,8 @@ from pandas.api.types import (
     is_numeric_dtype,
     is_object_dtype,
 )
+import pip
+pip.main(["install", "openpyxl"])
 from openpyxl import Workbook
 from io import BytesIO
 
