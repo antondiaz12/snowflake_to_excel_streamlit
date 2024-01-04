@@ -11,12 +11,6 @@ from pandas.api.types import (
     is_object_dtype,
 )
 
-# Anaconda
-conda install openpyxl
-
-# Jupyter Notebook
-!pip install openpyxl
-
 
 
 # ------------- HEADERS -------------
