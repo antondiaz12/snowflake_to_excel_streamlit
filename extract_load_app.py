@@ -1,5 +1,6 @@
 import streamlit
 import pandas
+import io
 import requests #New section to display fruityvice API response
 import snowflake.connector
 from urllib.error import URLError
@@ -144,7 +145,20 @@ else:
 
 # -------- ACTION: EXPORT TO EXCEL ----------
 
+@streamlit.experimental_memo()
+def create_xlsx(snow_fruit):
+    buffer = io.BytesIO()
+    with pandas.ExcelWriter(buffer) as writer:
+        snow_fruit.to_excel(writer)
+    return buffer
 
+if streamlit.download_button(
+        label="Download",
+        data=create_xlsx(snow_fruit) ,
+        file_name='exp_fruit_data.xlsx',
+        mime="application/vnd.ms-excel"):
+    
+    st.write("thank you for downloading!")
 
 # -------------- ACTION: STOP  --------------
 streamlit.stop()
