@@ -11,6 +11,8 @@ from pandas.api.types import (
     is_object_dtype,
 )
 
+import pip3
+
 sudo -H pip3 install --upgrade pip
 
 sudo -H pip3 install openpyxl
