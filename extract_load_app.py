@@ -24,8 +24,8 @@ pip.main(['install', 'openpyxl==2.1.4'])
 
 #pip3 install openpyxl --user
 
-from openpyxl import Workbook
-from io import BytesIO
+#from openpyxl import Workbook
+#from io import BytesIO
 
 
 
@@ -162,35 +162,20 @@ else:
     snow_fruit
 
 # -------- ACTION: EXPORT TO EXCEL ----------
-workbook = Workbook()
+@streamlit.experimental_memo(ttl=60, persist="disk")
+def create_xlsx(snow_fruit):
+    buffer = io.BytesIO()
+    with pandas.ExcelWriter(buffer) as writer:
+        snow_fruit.to_excel(writer)
+    return buffer
 
-with NamedTemporaryFile() as tmp:
-     workbook.save(snow_fruit.name)
-     data = BytesIO(snow_fruit.read())
 if streamlit.download_button(
         label="Download",
-        data=data,
+        data=create_xlsx(snow_fruit) ,
         file_name='exp_fruit_data.xlsx',
         mime="application/vnd.ms-excel"):
-    streamlit.write("thank you for downloading!")
-
-#@streamlit.experimental_memo(ttl=60, persist="disk")
-#def create_xlsx(snow_fruit):
-#    buffer = io.BytesIO()
-#    with pandas.ExcelWriter(buffer) as writer:
-#        snow_fruit.to_excel(writer)
-#    return buffer
-
-#if streamlit.download_button(
-#        label="Download",
-#        data=create_xlsx(snow_fruit) ,
-#        file_name='exp_fruit_data.xlsx',
-#        mime="application/vnd.ms-excel"):
     
-#    st.write("thank you for downloading!")
-
-#if st.button("Clear All"):
-#    st.experimental_memo.clear()
+    st.write("thank you for downloading!")
 
 # -------------- ACTION: STOP  --------------
 streamlit.stop()
