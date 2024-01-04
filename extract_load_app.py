@@ -10,7 +10,9 @@ from pandas.api.types import (
     is_numeric_dtype,
     is_object_dtype,
 )
-pip install openpyxl
+import sys 
+sys.path.append('/usr/lib/python3/dist-packages')
+
 
 # ------------- HEADERS -------------
 streamlit.title("From Snowflake to Streamlit")
