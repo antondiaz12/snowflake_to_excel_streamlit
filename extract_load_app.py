@@ -11,6 +11,7 @@ from pandas.api.types import (
     is_object_dtype,
 )
 from openpyxl import Workbook
+from io import BytesIO
 
 
 
@@ -147,26 +148,35 @@ else:
     snow_fruit
 
 # -------- ACTION: EXPORT TO EXCEL ----------
+workbook = Workbook()
 
-@streamlit.experimental_memo(ttl=60, persist="disk")
-def create_xlsx(snow_fruit):
-    buffer = io.BytesIO()
-    with pandas.ExcelWriter(buffer) as writer:
-        snow_fruit.to_excel(writer)
-    return buffer
-
+with NamedTemporaryFile() as tmp:
+     workbook.save(snow_fruit.name)
+     data = BytesIO(snow_fruit.read())
 if streamlit.download_button(
         label="Download",
-        data=create_xlsx(snow_fruit) ,
+        data=data,
         file_name='exp_fruit_data.xlsx',
         mime="application/vnd.ms-excel"):
-    
-    st.write("thank you for downloading!")
+    streamlit.write("thank you for downloading!")
 
-if st.button("Clear All"):
-    # Clear values from *all* memoized functions:
-    # i.e. clear values from both square and cube
-    st.experimental_memo.clear()
+#@streamlit.experimental_memo(ttl=60, persist="disk")
+#def create_xlsx(snow_fruit):
+#    buffer = io.BytesIO()
+#    with pandas.ExcelWriter(buffer) as writer:
+#        snow_fruit.to_excel(writer)
+#    return buffer
+
+#if streamlit.download_button(
+#        label="Download",
+#        data=create_xlsx(snow_fruit) ,
+#        file_name='exp_fruit_data.xlsx',
+#        mime="application/vnd.ms-excel"):
+    
+#    st.write("thank you for downloading!")
+
+#if st.button("Clear All"):
+#    st.experimental_memo.clear()
 
 # -------------- ACTION: STOP  --------------
 streamlit.stop()
