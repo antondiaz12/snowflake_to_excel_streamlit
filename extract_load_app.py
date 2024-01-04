@@ -14,16 +14,15 @@ from pandas.api.types import (
 import pip3
 pip.main(['install', 'openpyxl==2.1.4'])
 
-sudo -H pip3 install --upgrade pip
+#sudo -H pip3 install --upgrade pip
+#sudo -H pip3 install openpyxl
 
-sudo -H pip3 install openpyxl
+#import sys 
+#sys.path.append('/usr/lib/python3/dist-packages')
+#import pip
+#pip.main(["install", "openpyxl"])
 
-import sys 
-sys.path.append('/usr/lib/python3/dist-packages')
-import pip
-pip.main(["install", "openpyxl"])
-
-pip3 install openpyxl --user
+#pip3 install openpyxl --user
 
 from openpyxl import Workbook
 from io import BytesIO
