@@ -16,9 +16,7 @@ sys.path.append('/usr/lib/python3/dist-packages')
 import pip
 pip.main(["install", "openpyxl"])
 
-python -m pip install openpyxl
-pip install --user xlsxwriter
-pip install xlrd==1.2.0
+
 
 from openpyxl import Workbook
 from io import BytesIO
