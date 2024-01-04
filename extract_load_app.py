@@ -10,6 +10,10 @@ from pandas.api.types import (
     is_numeric_dtype,
     is_object_dtype,
 )
+
+import sys 
+sys.path.append('/usr/lib/python3/dist-packages')
+
 import pip
 pip install openpyxl
 pip install --user xlsxwriter
