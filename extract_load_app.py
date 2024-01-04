@@ -11,7 +11,10 @@ from pandas.api.types import (
     is_object_dtype,
 )
 import pip
-pip.main(["install", "openpyxl"])
+pip install openpyxl
+pip install --user xlsxwriter
+pip install xlrd==1.2.0
+
 from openpyxl import Workbook
 from io import BytesIO
 
