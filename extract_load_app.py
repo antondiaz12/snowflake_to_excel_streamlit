@@ -163,19 +163,19 @@ else:
 
 # -------- ACTION: EXPORT TO EXCEL ----------
 
-@streamlit.experimental_memo(ttl=60, persist="disk")
-def create_xlsx(snow_fruit):
-    buffer = io.BytesIO()
-    with pandas.ExcelWriter(buffer) as writer:
-        snow_fruit.to_excel(writer)
-    return buffer
+#@streamlit.experimental_memo(ttl=60, persist="disk")
+#def create_xlsx(snow_fruit):
+#    buffer = io.BytesIO()
+#    with pandas.ExcelWriter(buffer) as writer:
+#        snow_fruit.to_excel(writer)
+#    return buffer
  
-if streamlit.download_button(
-        label="Download",
-        data=create_xlsx(snow_fruit) ,
-        file_name='exp_fruit_data.xlsx',
-        mime="application/vnd.ms-excel"):
-    st.write("thank you for downloading!")
+#if streamlit.download_button(
+#        label="Download",
+#        data=create_xlsx(snow_fruit) ,
+#        file_name='exp_fruit_data.xlsx',
+#        mime="application/vnd.ms-excel"):
+#    st.write("thank you for downloading!")
 
 # -------------- ACTION: STOP  --------------
 streamlit.stop()
