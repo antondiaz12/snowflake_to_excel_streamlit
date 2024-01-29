@@ -1,138 +1,92 @@
 import streamlit
 import pandas
 import io
-import requests #New section to display fruityvice API response
-import snowflake.connector
-from urllib.error import URLError
+from snowflake.connector import connect
 from pandas.api.types import (
     is_categorical_dtype,
-    is_datetime64_any_dtype,
-    is_numeric_dtype,
-    is_object_dtype,
-)
-
-import pip
-pip.main(['install', 'openpyxl==2.1.4'])
-
-#sudo -H pip3 install --upgrade pip
-#sudo -H pip3 install openpyxl
-
-#import sys 
-#sys.path.append('/usr/lib/python3/dist-packages')
-#import pip
-#pip.main(["install", "openpyxl"])
-
-#pip3 install openpyxl --user
-
-#from openpyxl import Workbook
-#from io import BytesIO
-
-
-
+    is_numeric_dtype)
+ 
+ 
 # ------------- HEADERS -------------
 streamlit.title("From Snowflake to Streamlit")
 streamlit.header("Check out our fruit list!")
 
-# ----------- FUNCTIONS ------------
-def get_fruit_load_list():
+#------------ SNOWFLAKE CONNECTION
+def snow_connection(query):
+  my_cnx = connect(
+    user = "marucarrillog",
+    password = "Boehringer1.",
+    account = "XQGYYIV-SA20142",
+    warehouse = "compute_wh" ,
+    database = "pc_rivery_db" ,
+    schema = "public",
+    role = "accountadmin")
   with my_cnx.cursor() as my_cur:
-        my_cur.execute("select * from fruit_load_list")
-        return my_cur.fetchall()
+    my_cur.execute(query)
+    return my_cur.fetchall()
 
-if streamlit.button('🥑 Get Fruit List 🥑'):
-  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-  my_data_rows = get_fruit_load_list()
-  my_cnx.close()
+
+if streamlit.button('🍉 Get Fruit List 🍉'):
+  my_data_rows = snow_connection("select * from fruit_load_list")
   table = pandas.DataFrame(my_data_rows)
   table.columns = ["Fruits"]
   streamlit.dataframe(table)
 
+# ----- ACTIONS:ADD/REMOVE/UPDATE 
+# 1. Connect to snowflake
+# 2. Add, remove or update the data 
+# 4. Close the connection
 
-def insert_row_snowflake(new_fruit):
-  with my_cnx.cursor() as my_cur:
-      my_cur.execute("insert into fruit_load_list(FRUIT_NAME) values ('"+new_fruit+"')")
-      return "Fruit added!"
-
-def remove_row_snowflake(remove_fruit):
-  with my_cnx.cursor() as my_cur:
-    my_cur.execute("delete from fruit_load_list where FRUIT_NAME = ('"+remove_fruit+"')")
-    return "Data removed!"
-
-def update_row_snowflake(update_fruit, old_fruit):
-  with my_cnx.cursor() as my_cur:
-    my_cur.execute("update fruit_load_list set FRUIT_NAME = ('"+update_fruit+"') WHERE FRUIT_NAME = ('"+old_fruit+"')")
-    return "Data updated!"
-
-def fruityvice_selected():
-  with my_cnx.cursor() as my_cur:
-      my_cur.execute("select name, id, family, orders, genus, calories, fat, sugar, carbohydrates, protein from fruit_load_list join fruityvice_table on lower(name) = fruit_name")
-      return my_cur.fetchall()
-
-# ----------- ACTION: ADD -----------
+# ACTION - ADD VALUES
 streamlit.header("Would you like to add a fruit?")
-add_fruit = streamlit.text_input('Write a fruit 🍌')
-add_fruit = add_fruit.lower()
+add_fruit = streamlit.text_input('Write a fruit 🍌').lower()
 if not add_fruit:
   streamlit.text("Please add a fruit")
 else:
-  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-  my_data_rows = get_fruit_load_list()
-  my_cnx.close()
-  info = pandas.DataFrame(my_data_rows)
-  if add_fruit not in info.values:
-    my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-    back_from_function = insert_row_snowflake(add_fruit)
-    streamlit.text(back_from_function)
-  elif add_fruit in info.values:
+  my_data_rows = snow_connection("select * from fruit_load_list")
+  if add_fruit not in pandas.DataFrame(my_data_rows).values:
+    query = "insert into fruit_load_list(FRUIT_NAME) values ('"+add_fruit+"')"
+    my_data_rows = snow_connection(query)
+    streamlit.text("Fruit added!")
+  else:
     streamlit.text("That fruit is already on the list")
 
-# ----------- ACTION: REMOVE ----------
+# ACTION - REMOVE VALUES
 streamlit.header("Would you like to remove a fruit?")
-fruit_box = streamlit.text_input('Specify the fruit 🥝')
-fruit_box = fruit_box.lower()
-if not fruit_box:
+remove_data = streamlit.text_input('Specify the fruit 🥝').lower()
+if not remove_data:
   streamlit.text("Please select a fruit from the list")
 else:
-  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-  my_data_rows = get_fruit_load_list()
-  my_cnx.close()
-  info = pandas.DataFrame(my_data_rows)
-  if fruit_box in info.values:
-    my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-    back_from_function = remove_row_snowflake(fruit_box)
-    streamlit.text(back_from_function)
+  my_data_rows = snow_connection("select * from fruit_load_list")
+  if remove_data in pandas.DataFrame(my_data_rows).values:
+    query = "delete from fruit_load_list where FRUIT_NAME = ('"+remove_data+"')"
+    my_data_rows = snow_connection(query)
+    streamlit.text("Data removed!")
   else:
     streamlit.text('Please enter a valid fruit')
 
-# ----------- ACTION: UPDATE -----------
+# ACTION - UPDATE VALUES
 streamlit.header("Would you like to update a fruit?")
-old_fruit = streamlit.text_input('Which fruit to update? 🍇')
-new_fruit = streamlit.text_input('Type the change 🥭')
-old_fruit = old_fruit.lower()
-new_fruit = new_fruit.lower()
+old_fruit = streamlit.text_input('Which fruit to update? 🍇').lower()
+new_fruit = streamlit.text_input('Type the change 🥭').lower()
 if not old_fruit or not new_fruit:
   streamlit.text("Please check the fields")
 else:
-  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-  my_data_rows = get_fruit_load_list()
-  my_cnx.close()
-  info = pandas.DataFrame(my_data_rows)
-  if old_fruit in info.values:
-    my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-    back_from_function = update_row_snowflake(new_fruit, old_fruit)
-    streamlit.text(back_from_function)
+  my_data_rows = snow_connection("select * from fruit_load_list")
+  if old_fruit in pandas.DataFrame(my_data_rows).values:
+    query = "update fruit_load_list set FRUIT_NAME = ('"+new_fruit+"') WHERE FRUIT_NAME = ('"+old_fruit+"')"
+    my_data_rows = snow_connection(query)
+    streamlit.text("Data updated!")
   else:
     streamlit.text("Please check the fields")
 
-# ----------- ACTION: FILTER ----------
+# ----- FILTER
+# Categorical and numerical data are filtered differently 
 streamlit.header("See detailed information of each fruit")
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-fruit_info = fruityvice_selected()
-my_cnx.close()
+query = "select name, id, family, orders, genus, calories, fat, sugar, carbohydrates, protein from fruit_load_list join fruityvice_table on lower(name) = fruit_name"
+fruit_info = snow_connection(query)
 snow_fruit = pandas.DataFrame(fruit_info)
 snow_fruit.columns = ["NAME", "ID", "FAMILY", "ORDER", "GENUS", "CALORIES", "FAT", "SUGAR", "CARBOHYDRATES", "PROTEIN"]
-#show_table = streamlit.dataframe(snow_fruit)
-
 modify = streamlit.checkbox("Apply filters to obtain the desired table")
 if not modify:
   snow_fruit
@@ -161,9 +115,8 @@ else:
         snow_fruit = snow_fruit[snow_fruit[column].between(*user_input_num)]
     snow_fruit
 
-# -------- ACTION: EXPORT TO EXCEL ----------
-
-@streamlit.experimental_memo(ttl=60, persist="disk")
+# ----- EXPORT TO EXCEL 
+@streamlit.cache_data()
 def create_xlsx(snow_fruit):
     buffer = io.BytesIO()
     with pandas.ExcelWriter(buffer) as writer:
@@ -171,30 +124,11 @@ def create_xlsx(snow_fruit):
     return buffer
  
 if streamlit.download_button(
-        label="Download",
+        label="Download ✅",
         data=create_xlsx(snow_fruit) ,
         file_name='exp_fruit_data.xlsx',
         mime="application/vnd.ms-excel"):
-    st.write("thank you for downloading!")
+    streamlit.write("Thank you for downloading!")
 
-# -------------- ACTION: STOP  --------------
+# ----- STOP STREAMLIT CONNECTION
 streamlit.stop()
-
-
-# ---------------- DRAFT CODE -------------
-#def get_fruityvice_data(this_fruit_choice):
-#  fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + this_fruit_choice)
-#  fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
-#  return fruityvice_normalized
-    
-#streamlit.header("Fruityvice Fruit Advice!")
-#try:
-#  fruit_choice = streamlit.text_input('What fruit would you like information about?')
-#  if not fruit_choice:
-#    streamlit.error("Please select a fruit to get information")
-#  else:
-#    back_from_function = get_fruityvice_data(fruit_choice)
-#    streamlit.dataframe(back_from_function)
-#except URLError as e:
-#  streamlit.error()
-
